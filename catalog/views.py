@@ -44,6 +44,20 @@ class AnimeListView(ListView):
         context["genres"] = Genre.objects.all()
         context["selected_genre"] = self.request.GET.get("genero", "")
         context["search_query"] = self.request.GET.get("q", "")
+        recent_ids = self.request.session.get("recent_anime_ids", [])
+        if isinstance(recent_ids, list):
+            recent_ids = [
+                anime_id
+                for anime_id in recent_ids
+                if isinstance(anime_id, int) and not isinstance(anime_id, bool)
+            ]
+            recent = Anime.objects.filter(pk__in=recent_ids).prefetch_related("genres")
+            recent_by_id = {anime.pk: anime for anime in recent}
+            context["recent_animes"] = [
+                recent_by_id[anime_id] for anime_id in recent_ids if anime_id in recent_by_id
+            ]
+        else:
+            context["recent_animes"] = []
         return context
 
 
@@ -62,6 +76,18 @@ class AnimeDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        recent_ids = self.request.session.get("recent_anime_ids", [])
+        if not isinstance(recent_ids, list):
+            recent_ids = []
+        recent_ids = [
+            anime_id
+            for anime_id in recent_ids
+            if isinstance(anime_id, int) and not isinstance(anime_id, bool)
+        ]
+        recent_ids = [self.object.pk] + [
+            anime_id for anime_id in recent_ids if anime_id != self.object.pk
+        ]
+        self.request.session["recent_anime_ids"] = recent_ids[:12]
         context["is_favorite"] = (
             self.request.user.is_authenticated
             and Favorite.objects.filter(user=self.request.user, anime=self.object).exists()

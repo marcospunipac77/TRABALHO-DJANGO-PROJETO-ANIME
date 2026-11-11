@@ -41,6 +41,22 @@ class CatalogTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Temporada 1")
         self.assertContains(response, self.episode.title)
+        self.assertContains(response, "Assistir")
+        self.assertContains(response, "Em breve!")
+
+    def test_recently_viewed_animes_appear_on_home_in_visit_order(self):
+        second_anime = Anime.objects.create(
+            title="Outra aventura", synopsis="Mais uma sinopse.", release_year=2024
+        )
+        self.client.get(self.anime.get_absolute_url())
+        self.client.get(second_anime.get_absolute_url())
+        response = self.client.get(reverse("catalog:home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            [anime.pk for anime in response.context["recent_animes"]],
+            [second_anime.pk, self.anime.pk],
+        )
+        self.assertContains(response, "Continuar assistindo")
 
     def test_staff_can_create_and_edit_anime(self):
         user = get_user_model().objects.create_user(
@@ -108,6 +124,7 @@ class CatalogTests(TestCase):
         call_command("load_demo_data", stdout=None)
         call_command("load_demo_data", stdout=None)
         self.assertEqual(Anime.objects.filter(slug="a-lenda-de-aster").count(), 1)
+        self.assertEqual(Anime.objects.filter(slug="attack-on-titan").count(), 1)
         self.assertEqual(
             Anime.objects.get(slug="a-lenda-de-aster").seasons.get(number=1).episodes.count(), 3
         )

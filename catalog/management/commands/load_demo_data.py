@@ -9,7 +9,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         genres = {
             name: Genre.objects.get_or_create(name=name)[0]
-            for name in ["Aventura", "Fantasia", "Ficcao cientifica"]
+            for name in [
+                "Aventura",
+                "Fantasia",
+                "Ficcao cientifica",
+                "Acao",
+                "Drama",
+                "Misterio",
+                "Comedia",
+                "Sobrenatural",
+            ]
         }
         demo_animes = [
             {
@@ -51,6 +60,116 @@ class Command(BaseCommand):
                 "season_title": "A Melodia Distante",
                 "episodes": ["A primeira nota", "O vale silencioso", "Canção de chegada"],
             },
+            {
+                "slug": "attack-on-titan",
+                "title": "Attack on Titan",
+                "synopsis": (
+                    "Em um mundo cercado por muralhas, a humanidade luta para sobreviver "
+                    "e descobrir a verdade por trás de seus misteriosos inimigos."
+                ),
+                "release_year": 2013,
+                "status": Anime.Status.COMPLETED,
+                "genres": ["Acao", "Drama", "Fantasia"],
+            },
+            {
+                "slug": "jujutsu-kaisen",
+                "title": "Jujutsu Kaisen",
+                "synopsis": (
+                    "Um estudante se envolve no mundo das maldições e passa a treinar "
+                    "para proteger as pessoas de ameaças sobrenaturais."
+                ),
+                "release_year": 2020,
+                "status": Anime.Status.AIRING,
+                "genres": ["Acao", "Fantasia", "Sobrenatural"],
+            },
+            {
+                "slug": "naruto",
+                "title": "Naruto",
+                "synopsis": (
+                    "Um jovem ninja determinado busca reconhecimento enquanto aprende "
+                    "sobre amizade, coragem e responsabilidade."
+                ),
+                "release_year": 2002,
+                "status": Anime.Status.COMPLETED,
+                "genres": ["Acao", "Aventura", "Fantasia"],
+            },
+            {
+                "slug": "one-piece",
+                "title": "One Piece",
+                "synopsis": (
+                    "Um capitão otimista reúne uma tripulação e parte pelos mares "
+                    "em busca de um tesouro lendário."
+                ),
+                "release_year": 1999,
+                "status": Anime.Status.AIRING,
+                "genres": ["Acao", "Aventura", "Comedia"],
+            },
+            {
+                "slug": "demon-slayer",
+                "title": "Demon Slayer",
+                "synopsis": (
+                    "Após uma tragédia mudar sua família, um jovem começa uma jornada "
+                    "para enfrentar criaturas perigosas e proteger quem ama."
+                ),
+                "release_year": 2019,
+                "status": Anime.Status.COMPLETED,
+                "genres": ["Acao", "Drama", "Fantasia"],
+            },
+            {
+                "slug": "my-hero-academia",
+                "title": "My Hero Academia",
+                "synopsis": (
+                    "Em uma sociedade de pessoas com habilidades especiais, um estudante "
+                    "sonha em se tornar herói e ajudar os outros."
+                ),
+                "release_year": 2016,
+                "status": Anime.Status.COMPLETED,
+                "genres": ["Acao", "Aventura", "Drama"],
+            },
+            {
+                "slug": "death-note",
+                "title": "Death Note",
+                "synopsis": (
+                    "Um estudante encontra um caderno misterioso e se vê envolvido "
+                    "em um jogo de inteligência que desafia a justiça."
+                ),
+                "release_year": 2006,
+                "status": Anime.Status.COMPLETED,
+                "genres": ["Drama", "Misterio", "Sobrenatural"],
+            },
+            {
+                "slug": "spy-x-family",
+                "title": "Spy x Family",
+                "synopsis": (
+                    "Uma família formada por pessoas com vidas secretas tenta manter "
+                    "as aparências enquanto enfrenta situações inesperadas."
+                ),
+                "release_year": 2022,
+                "status": Anime.Status.AIRING,
+                "genres": ["Acao", "Comedia"],
+            },
+            {
+                "slug": "dragon-ball-z",
+                "title": "Dragon Ball Z",
+                "synopsis": (
+                    "Um guerreiro e seus amigos treinam e enfrentam desafios cada vez "
+                    "maiores para proteger seu planeta."
+                ),
+                "release_year": 1989,
+                "status": Anime.Status.COMPLETED,
+                "genres": ["Acao", "Aventura", "Fantasia"],
+            },
+            {
+                "slug": "solo-leveling",
+                "title": "Solo Leveling",
+                "synopsis": (
+                    "Em um mundo de portais e caçadores, um jovem considerado fraco "
+                    "recebe uma oportunidade para evoluir de forma extraordinária."
+                ),
+                "release_year": 2024,
+                "status": Anime.Status.AIRING,
+                "genres": ["Acao", "Fantasia"],
+            },
         ]
 
         for item in demo_animes:
@@ -64,6 +183,14 @@ class Command(BaseCommand):
                 },
             )
             anime.genres.set(genres[name] for name in item["genres"])
+            item.setdefault(
+                "season_title",
+                "Temporada 1",
+            )
+            item.setdefault(
+                "episodes",
+                ["Episódio de demonstração 1", "Episódio de demonstração 2"],
+            )
             season, _ = Season.objects.update_or_create(
                 anime=anime,
                 number=1,
@@ -75,7 +202,7 @@ class Command(BaseCommand):
                     number=number,
                     defaults={
                         "title": title,
-                        "synopsis": "Episodio demonstrativo original.",
+                        "synopsis": "Conteúdo demonstrativo do projeto.",
                         "duration_minutes": 24,
                     },
                 )

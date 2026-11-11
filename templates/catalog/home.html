@@ -13,6 +13,24 @@
     <div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="hero-symbol">ア</div></div>
 </section>
 
+{% if recent_animes %}
+<section class="recent-section">
+    <div class="section-heading">
+        <div><p class="eyebrow">DE ONDE VOCÊ PAROU</p><h2>Continuar assistindo</h2></div>
+        <span class="result-count">Vistos recentemente neste navegador</span>
+    </div>
+    <div class="recent-list">
+        {% for anime in recent_animes %}
+            <a class="recent-card poster--{{ anime.slug }}" href="{{ anime.get_absolute_url }}">
+                {% if anime.poster_url %}<span class="recent-background" style="background-image: url('{{ anime.poster_url|escape }}')"></span>{% endif %}
+                <span class="recent-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.8c0-.8.9-1.3 1.6-.9l10 6.2a1 1 0 0 1 0 1.7l-10 6.2c-.7.4-1.6-.1-1.6-.9V5.8Z"/></svg></span>
+                <span class="recent-card-copy"><strong>{{ anime.title }}</strong><small>Continuar de onde parou</small></span>
+            </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
 <section class="catalog-section" id="catalogo">
     <div class="section-heading">
         <div><p class="eyebrow">ESCOLHA O QUE ASSISTIR</p><h2>Catálogo</h2></div>
@@ -35,8 +53,8 @@
     <div class="anime-grid">
         {% for anime in animes %}
             <article class="anime-card">
-                <a class="poster" href="{{ anime.get_absolute_url }}" {% if anime.poster_url %}style="background-image: url('{{ anime.poster_url|escape }}')"{% endif %}>
-                    {% if not anime.poster_url %}<span class="poster-initial">{{ anime.title|slice:":1" }}</span>{% endif %}
+                <a class="poster poster--{{ anime.slug }}" href="{{ anime.get_absolute_url }}" {% if anime.poster_url %}style="background-image: url('{{ anime.poster_url|escape }}')"{% endif %}>
+                    <span class="poster-art-title">{{ anime.title }}</span>
                     <span class="poster-badge">{{ anime.get_status_display }}</span>
                 </a>
                 <div class="card-content">

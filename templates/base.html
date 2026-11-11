@@ -5,12 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#090b12">
+    <link rel="icon" type="image/svg+xml" href="{% static 'catalog/img/anistream-logo.svg' %}">
     <title>{% block title %}AniStream{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'catalog/css/style.css' %}">
 </head>
 <body>
     <header class="site-header">
-        <a class="brand" href="{% url 'catalog:home' %}"><span class="brand-mark">A</span> AniStream</a>
+        <a class="brand" href="{% url 'catalog:home' %}"><img class="brand-logo" src="{% static 'catalog/img/anistream-logo.svg' %}" alt=""><span>AniStream</span></a>
         <nav class="main-nav" aria-label="Navegacao principal">
             <a href="{% url 'catalog:home' %}">Inicio</a>
             {% if user.is_authenticated %}<a href="{% url 'catalog:favorites' %}">Favoritos</a>{% endif %}
@@ -36,5 +37,16 @@
         {% block content %}{% endblock %}
     </main>
     <footer class="site-footer">AniStream · Projeto acadêmico de catálogo de animes</footer>
+    <dialog class="watch-dialog" id="watch-dialog" aria-labelledby="watch-dialog-title">
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Fechar">×</button>
+        <span class="dialog-play-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8 5.8c0-.8.9-1.3 1.6-.9l10 6.2a1 1 0 0 1 0 1.7l-10 6.2c-.7.4-1.6-.1-1.6-.9V5.8Z"/></svg>
+        </span>
+        <p class="eyebrow">ANISTREAM</p>
+        <h2 id="watch-dialog-title">Em breve!</h2>
+        <p id="watch-dialog-message">A reprodução estará disponível em uma próxima versão do projeto.</p>
+        <button class="button button-primary" type="button" data-close-dialog>Entendi</button>
+    </dialog>
+    <script src="{% static 'catalog/js/site.js' %}" defer></script>
 </body>
 </html>

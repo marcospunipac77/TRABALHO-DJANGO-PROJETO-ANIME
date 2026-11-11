@@ -6,8 +6,8 @@
 <section class="detail-hero">
     {% if anime.poster_url %}<div class="detail-backdrop" style="background-image: url('{{ anime.poster_url|escape }}')"></div>{% endif %}
     <div class="detail-layout">
-        <div class="detail-poster" {% if anime.poster_url %}style="background-image: url('{{ anime.poster_url|escape }}')"{% endif %}>
-            {% if not anime.poster_url %}<span>{{ anime.title|slice:":1" }}</span>{% endif %}
+        <div class="detail-poster poster poster--{{ anime.slug }}" {% if anime.poster_url %}style="background-image: url('{{ anime.poster_url|escape }}')"{% endif %}>
+            <span class="poster-art-title">{{ anime.title }}</span>
         </div>
         <div class="detail-copy">
             <a class="back-link" href="{% url 'catalog:home' %}">← Voltar ao catálogo</a>
@@ -16,6 +16,10 @@
             <div class="genre-list">{% for genre in anime.genres.all %}<span>{{ genre.name }}</span>{% empty %}<span>Sem gênero</span>{% endfor %}</div>
             <p class="detail-synopsis">{{ anime.synopsis }}</p>
             <div class="detail-actions">
+                <button class="button button-primary watch-button" type="button" data-watch-title="{{ anime.title }}">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.8c0-.8.9-1.3 1.6-.9l10 6.2a1 1 0 0 1 0 1.7l-10 6.2c-.7.4-1.6-.1-1.6-.9V5.8Z"/></svg>
+                    Assistir
+                </button>
                 {% if user.is_authenticated %}
                     <form method="post" action="{% url 'catalog:toggle_favorite' anime.slug %}">
                         {% csrf_token %}
@@ -47,6 +51,10 @@
                         <span class="episode-number">{{ episode.number|stringformat:"02d" }}</span>
                         <div class="episode-info"><h4>{{ episode.title }}</h4>{% if episode.synopsis %}<p>{{ episode.synopsis }}</p>{% endif %}</div>
                         <span class="episode-duration">{{ episode.duration_minutes }} min</span>
+                        <button class="episode-watch" type="button" data-watch-title="{{ anime.title }} — {{ episode.title }}" aria-label="Assistir {{ episode.title }}">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.8c0-.8.9-1.3 1.6-.9l10 6.2a1 1 0 0 1 0 1.7l-10 6.2c-.7.4-1.6-.1-1.6-.9V5.8Z"/></svg>
+                            Assistir
+                        </button>
                         {% if episode.video_url %}<a class="episode-link" href="{{ episode.video_url }}" target="_blank" rel="noopener noreferrer">Trailer ↗</a>{% endif %}
                     </article>
                 {% empty %}
