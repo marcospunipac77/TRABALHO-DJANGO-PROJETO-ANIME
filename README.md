@@ -35,7 +35,7 @@ python manage.py runserver
 
 Abra `http://127.0.0.1:8000/`. O comando `load_demo_data` carrega títulos conhecidos e animes fictícios para a demonstração, com uma temporada e episódios de exemplo, e pode ser executado novamente sem duplicar os dados. Entre em `http://127.0.0.1:8000/admin/` para cadastrar gêneros, animes, temporadas e episódios. Use a conta de superusuário também para acessar os formulários de criação e edição do catálogo. Visitantes podem criar uma conta para usar a lista de favoritos.
 
-O botão "Assistir" é apenas ilustrativo e apresenta uma mensagem de que o recurso estará disponível em breve. Os banners do catálogo são ilustrações gráficas feitas em CSS, sem imagens dos animes. Para usar outros posters, informe uma URL de imagem que você tenha permissão para usar. Os links de vídeo são opcionais e devem apontar apenas para trailers ou conteúdos autorizados.
+O botão "Assistir" é apenas ilustrativo e apresenta uma mensagem de que o recurso estará disponível em breve. Os animes populares de demonstração usam URLs de capas configuradas pelo comando `load_demo_data`; elas podem ser substituídas no Admin. Como as imagens são carregadas de outros sites, seus links podem mudar ou deixar de funcionar. Use apenas imagens que você tenha permissão para utilizar. Os links de vídeo são opcionais e devem apontar apenas para trailers ou conteúdos autorizados.
 
 As configurações locais usam `DEBUG=True` e uma chave de desenvolvimento. Antes de publicar o site em produção, configure `DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False` e `DJANGO_ALLOWED_HOSTS` no ambiente do servidor; não coloque a chave secreta no GitHub.
 

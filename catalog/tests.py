@@ -125,6 +125,8 @@ class CatalogTests(TestCase):
         call_command("load_demo_data", stdout=None)
         self.assertEqual(Anime.objects.filter(slug="a-lenda-de-aster").count(), 1)
         self.assertEqual(Anime.objects.filter(slug="attack-on-titan").count(), 1)
+        self.assertTrue(Anime.objects.get(slug="attack-on-titan").poster_url)
+        self.assertTrue(Anime.objects.get(slug="tokyo-ghoul").poster_url)
         self.assertEqual(
             Anime.objects.get(slug="a-lenda-de-aster").seasons.get(number=1).episodes.count(), 3
         )

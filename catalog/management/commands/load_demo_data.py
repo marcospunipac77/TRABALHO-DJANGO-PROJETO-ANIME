@@ -69,6 +69,7 @@ class Command(BaseCommand):
                 ),
                 "release_year": 2013,
                 "status": Anime.Status.COMPLETED,
+                "poster_url": "https://tse1.mm.bing.net/th/id/OIP.C5YbOkXYwQevjdqU8WlgYwHaKc?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
                 "genres": ["Acao", "Drama", "Fantasia"],
             },
             {
@@ -80,6 +81,7 @@ class Command(BaseCommand):
                 ),
                 "release_year": 2020,
                 "status": Anime.Status.AIRING,
+                "poster_url": "https://tse4.mm.bing.net/th/id/OIP.22t10H0i4PiFgrtA0vtyPQHaKd?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
                 "genres": ["Acao", "Fantasia", "Sobrenatural"],
             },
             {
@@ -91,6 +93,7 @@ class Command(BaseCommand):
                 ),
                 "release_year": 2002,
                 "status": Anime.Status.COMPLETED,
+                "poster_url": "https://i.pinimg.com/originals/82/6d/90/826d9043a4e3723e64bb6cd4e9c1e27c.jpg",
                 "genres": ["Acao", "Aventura", "Fantasia"],
             },
             {
@@ -102,6 +105,7 @@ class Command(BaseCommand):
                 ),
                 "release_year": 1999,
                 "status": Anime.Status.AIRING,
+                "poster_url": "https://tse1.explicit.bing.net/th/id/OIP._roz0yx2Lx2hGL64yGXgGgHaLH?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
                 "genres": ["Acao", "Aventura", "Comedia"],
             },
             {
@@ -113,6 +117,7 @@ class Command(BaseCommand):
                 ),
                 "release_year": 2019,
                 "status": Anime.Status.COMPLETED,
+                "poster_url": "https://tse2.mm.bing.net/th/id/OIP.aeeA0p3tSf3x4FFXEyDseQHaLH?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
                 "genres": ["Acao", "Drama", "Fantasia"],
             },
             {
@@ -124,6 +129,7 @@ class Command(BaseCommand):
                 ),
                 "release_year": 2016,
                 "status": Anime.Status.COMPLETED,
+                "poster_url": "https://tse4.mm.bing.net/th/id/OIP.4WyF7tMyYl7r6ZGITB11nQHaJ4?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
                 "genres": ["Acao", "Aventura", "Drama"],
             },
             {
@@ -135,6 +141,7 @@ class Command(BaseCommand):
                 ),
                 "release_year": 2006,
                 "status": Anime.Status.COMPLETED,
+                "poster_url": "https://th.bing.com/th/id/R.22faa5d6b1abb488503cbd8887baf84b?rik=jHI%2fDB5JNswXUQ&riu=http%3a%2f%2fscreencritix.com%2fwp-content%2fuploads%2f2013%2f10%2fdeath-note-poster.jpg&ehk=THUxplwPtT%2bxqZbr8lF",
                 "genres": ["Drama", "Misterio", "Sobrenatural"],
             },
             {
@@ -146,6 +153,7 @@ class Command(BaseCommand):
                 ),
                 "release_year": 2022,
                 "status": Anime.Status.AIRING,
+                "poster_url": "https://static1.colliderimages.com/wordpress/wp-content/uploads/2022/08/spy-x-family-poster.jpg",
                 "genres": ["Acao", "Comedia"],
             },
             {
@@ -157,6 +165,7 @@ class Command(BaseCommand):
                 ),
                 "release_year": 1989,
                 "status": Anime.Status.COMPLETED,
+                "poster_url": "https://i5.walmartimages.com/seo/Dragon-Ball-Z-Saiyans-Wall-Poster-14-725-x-22-375_d3e85628-c474-4210-b29f-5db99dc33b2a.aebb7b3fac7c2ccb2b13dc1c5152a9f2.jpeg",
                 "genres": ["Acao", "Aventura", "Fantasia"],
             },
             {
@@ -168,19 +177,34 @@ class Command(BaseCommand):
                 ),
                 "release_year": 2024,
                 "status": Anime.Status.AIRING,
+                "poster_url": "https://th.bing.com/th?id=OIF.cLwM1FyMUaajcO%2bQmAsPSQ&r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
                 "genres": ["Acao", "Fantasia"],
+            },
+            {
+                "slug": "tokyo-ghoul",
+                "title": "TOKYO GHOUL",
+                "synopsis": "um simples garoto que tem sua vida completamente mudada e precisa saber  lidar com todos seus novos problemas",
+                "release_year": 2014,
+                "status": Anime.Status.COMPLETED,
+                "poster_url": "https://tse4.mm.bing.net/th/id/OIP.zBYIbDhCTkN_4YuZ-SpntAHaJ4?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+                "genres": ["Ficcao cientifica"],
+                "season_title": "NOVO COMEÇO",
+                "episodes": ["PILOTO"],
             },
         ]
 
         for item in demo_animes:
+            anime_defaults = {
+                "title": item["title"],
+                "synopsis": item["synopsis"],
+                "release_year": item["release_year"],
+                "status": item["status"],
+            }
+            if "poster_url" in item:
+                anime_defaults["poster_url"] = item["poster_url"]
             anime, _ = Anime.objects.update_or_create(
                 slug=item["slug"],
-                defaults={
-                    "title": item["title"],
-                    "synopsis": item["synopsis"],
-                    "release_year": item["release_year"],
-                    "status": item["status"],
-                },
+                defaults=anime_defaults,
             )
             anime.genres.set(genres[name] for name in item["genres"])
             item.setdefault(
