@@ -35,6 +35,8 @@ Abra `http://127.0.0.1:8000/`. O comando `load_demo_data` carrega três animes f
 
 Para salvar imagens, informe uma URL de poster que você tenha permissão para usar. Os links de vídeo são opcionais e devem apontar apenas para trailers ou conteúdos autorizados.
 
+As configurações locais usam `DEBUG=True` e uma chave de desenvolvimento. Antes de publicar o site em produção, configure `DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False` e `DJANGO_ALLOWED_HOSTS` no ambiente do servidor; não coloque a chave secreta no GitHub.
+
 ## Testes
 
 ```powershell
