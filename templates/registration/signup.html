@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Criar conta — AniStream{% endblock %}
+
+{% block content %}
+<section class="form-page login-page">
+    <div class="form-heading"><p class="eyebrow">JUNTE-SE À COMUNIDADE</p><h1>Criar conta</h1><p>Crie sua conta para organizar sua lista de animes favoritos.</p></div>
+    <form class="data-form" method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+        {% for field in form %}
+            <div class="form-field">{{ field.label_tag }}{{ field }}{% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>
+        {% endfor %}
+        <button class="button button-primary button-wide" type="submit">Criar conta</button>
+    </form>
+</section>
+{% endblock %}

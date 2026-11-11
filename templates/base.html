@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#090b12">
+    <title>{% block title %}AniStream{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'catalog/css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{% url 'catalog:home' %}"><span class="brand-mark">A</span> AniStream</a>
+        <nav class="main-nav" aria-label="Navegacao principal">
+            <a href="{% url 'catalog:home' %}">Inicio</a>
+            {% if user.is_authenticated %}<a href="{% url 'catalog:favorites' %}">Favoritos</a>{% endif %}
+            {% if user.is_staff %}<a href="{% url 'catalog:anime_create' %}">Cadastrar anime</a>{% endif %}
+            {% if user.is_authenticated %}
+                {% if user.is_staff %}<a href="/admin/">Admin</a>{% endif %}
+                <form class="logout-form" method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="nav-button" type="submit">Sair</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}">Entrar</a>
+                <a href="{% url 'signup' %}">Criar conta</a>
+            {% endif %}
+        </nav>
+    </header>
+    <main>
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="site-footer">AniStream · Projeto acadêmico de catálogo de animes</footer>
+</body>
+</html>

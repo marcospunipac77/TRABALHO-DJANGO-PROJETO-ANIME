@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Meus favoritos — AniStream{% endblock %}
+
+{% block content %}
+<section class="catalog-section">
+    <div class="section-heading">
+        <div><p class="eyebrow">SUA LISTA PESSOAL</p><h2>Meus favoritos</h2></div>
+        <span class="result-count">{{ favorites|length }} títulos</span>
+    </div>
+    <div class="anime-grid">
+        {% for favorite in favorites %}
+            {% with anime=favorite.anime %}
+                <article class="anime-card">
+                    <a class="poster" href="{{ anime.get_absolute_url }}" {% if anime.poster_url %}style="background-image: url('{{ anime.poster_url|escape }}')"{% endif %}>
+                        {% if not anime.poster_url %}<span class="poster-initial">{{ anime.title|slice:":1" }}</span>{% endif %}
+                        <span class="poster-badge">{{ anime.get_status_display }}</span>
+                    </a>
+                    <div class="card-content">
+                        <p class="card-meta">{{ anime.release_year }}</p>
+                        <h3><a href="{{ anime.get_absolute_url }}">{{ anime.title }}</a></h3>
+                        <p class="card-synopsis">{{ anime.synopsis|truncatewords:18 }}</p>
+                        <a class="text-link" href="{{ anime.get_absolute_url }}">Ver detalhes <span aria-hidden="true">→</span></a>
+                    </div>
+                </article>
+            {% endwith %}
+        {% empty %}
+            <div class="empty-state"><div class="empty-icon">☆</div><h3>Sua lista está vazia</h3><p>Explore o catálogo e salve os animes que quiser ver depois.</p><a class="button button-primary" href="{% url 'catalog:home' %}">Explorar catálogo</a></div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

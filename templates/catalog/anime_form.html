@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{% if object %}Editar {{ object.title }}{% else %}Cadastrar anime{% endif %} — AniStream{% endblock %}
+
+{% block content %}
+<section class="form-page">
+    <a class="back-link" href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'catalog:home' %}{% endif %}">← Cancelar e voltar</a>
+    <div class="form-heading"><p class="eyebrow">ÁREA DE GERENCIAMENTO</p><h1>{% if object %}Editar anime{% else %}Cadastrar anime{% endif %}</h1><p>Preencha as informações do catálogo. Temporadas e episódios são gerenciados no Admin.</p></div>
+    <form class="data-form" method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+        {% for field in form %}
+            <div class="form-field {% if field.name == 'genres' %}genre-field{% endif %}">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+                {% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
+            </div>
+        {% endfor %}
+        <div class="form-actions"><button class="button button-primary" type="submit">Salvar anime</button><a class="button button-secondary" href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'catalog:home' %}{% endif %}">Cancelar</a></div>
+    </form>
+</section>
+{% endblock %}

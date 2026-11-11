@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}{{ anime.title }} — AniStream{% endblock %}
+
+{% block content %}
+<section class="detail-hero">
+    {% if anime.poster_url %}<div class="detail-backdrop" style="background-image: url('{{ anime.poster_url|escape }}')"></div>{% endif %}
+    <div class="detail-layout">
+        <div class="detail-poster" {% if anime.poster_url %}style="background-image: url('{{ anime.poster_url|escape }}')"{% endif %}>
+            {% if not anime.poster_url %}<span>{{ anime.title|slice:":1" }}</span>{% endif %}
+        </div>
+        <div class="detail-copy">
+            <a class="back-link" href="{% url 'catalog:home' %}">← Voltar ao catálogo</a>
+            <p class="eyebrow">{{ anime.get_status_display }} · {{ anime.release_year }}</p>
+            <h1>{{ anime.title }}</h1>
+            <div class="genre-list">{% for genre in anime.genres.all %}<span>{{ genre.name }}</span>{% empty %}<span>Sem gênero</span>{% endfor %}</div>
+            <p class="detail-synopsis">{{ anime.synopsis }}</p>
+            <div class="detail-actions">
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'catalog:toggle_favorite' anime.slug %}">
+                        {% csrf_token %}
+                        <button class="button button-primary" type="submit">{% if is_favorite %}★ Remover dos favoritos{% else %}☆ Adicionar aos favoritos{% endif %}</button>
+                    </form>
+                {% else %}
+                    <a class="button button-primary" href="{% url 'login' %}?next={{ request.path }}">Entrar para favoritar</a>
+                {% endif %}
+                {% if user.is_staff %}<a class="button button-secondary" href="{% url 'catalog:anime_edit' anime.slug %}">Editar anime</a>{% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="episodes-section">
+    <div class="section-heading">
+        <div><p class="eyebrow">GUIA DE EPISÓDIOS</p><h2>Temporadas</h2></div>
+        <span class="result-count">{{ anime.seasons.count }} temporadas</span>
+    </div>
+    {% for season in anime.seasons.all %}
+        <section class="season-block">
+            <div class="season-heading">
+                <h3>{% if season.title %}{{ season.title }}{% else %}Temporada {{ season.number }}{% endif %}</h3>
+                {% if season.release_year %}<span>{{ season.release_year }}</span>{% endif %}
+            </div>
+            <div class="episode-list">
+                {% for episode in season.episodes.all %}
+                    <article class="episode-row">
+                        <span class="episode-number">{{ episode.number|stringformat:"02d" }}</span>
+                        <div class="episode-info"><h4>{{ episode.title }}</h4>{% if episode.synopsis %}<p>{{ episode.synopsis }}</p>{% endif %}</div>
+                        <span class="episode-duration">{{ episode.duration_minutes }} min</span>
+                        {% if episode.video_url %}<a class="episode-link" href="{{ episode.video_url }}" target="_blank" rel="noopener noreferrer">Trailer ↗</a>{% endif %}
+                    </article>
+                {% empty %}
+                    <p class="muted-copy">Ainda não há episódios cadastrados nesta temporada.</p>
+                {% endfor %}
+            </div>
+        </section>
+    {% empty %}
+        <div class="empty-state compact"><h3>Temporadas em breve</h3><p>As temporadas e os episódios podem ser cadastrados pelo painel Admin.</p></div>
+    {% endfor %}
+</section>
+{% endblock %}

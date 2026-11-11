@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Entrar — AniStream{% endblock %}
+
+{% block content %}
+<section class="form-page login-page">
+    <div class="form-heading"><p class="eyebrow">BEM-VINDO DE VOLTA</p><h1>Entrar</h1><p>Entre para salvar seus animes favoritos.</p></div>
+    <form class="data-form" method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+        {% for field in form %}
+            <div class="form-field">{{ field.label_tag }}{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>
+        {% endfor %}
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+        <button class="button button-primary button-wide" type="submit">Entrar</button>
+    </form>
+</section>
+{% endblock %}
